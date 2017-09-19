@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title> Memory Game </title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+
+<style>
+
+body {
+background-color:#7B2BBE;
+color:orange;
+text-align:center;
+margin-top:60px;
+}
+
+.bg-1 {
+align:center;
+margin-top:100px;
+}
+
+.bg-2 {
+width:75px;
+height:75px;
+background-color:lightblue;
+display:inline-block;
+text-align:center;
+padding-top:20px;
+font-size:30px;
+margin-left:10px;
+}
+ 
+.row {
+padding-top:10px;
+}
+
+</style> 
+<script>
+var check;
+function clearit()
+{
+    window.clearInterval(check);
+    document.getElementById("scor").innerHTML=0;
+    document.getElementById("mov").innerHTML=0;
+    nored=0;
+    score=0;
+    move=0;
+}
+
+function generate()
+{
+    var v1,v2;
+    var arr=[];
+    for(v1=0;v1<8;v1++)
+        arr[v1]=Math.floor(Math.random() * 10) + 1;
+
+    var carr=["a","b","c","d","e","f","g","h","i","j","k","l","m","n","o","p"];
+    carr.sort(function(c,d){return 0.5 - Math.random()});
+
+    for(v2=0;v2<16;v2++)
+        document.getElementById(carr[v2]).style.color="transparent";
+
+    for(v1=0,v2=0;v1<16,v2<8;v1+=2,v2+=1)
+    {
+        document.getElementById(carr[v1]).innerHTML=arr[v2];
+        document.getElementById(carr[v1+1]).innerHTML=arr[v2];
+    }
+}
+
+function starttime()
+{
+    clearit();
+    generate();
+    var m=1;
+    var s=30;
+    check=window.setInterval(Timer,1000);
+    function Timer()
+    {
+        if(m==0 && s==0)
+                window.alert("Time up !!");
+        else if(s!=0)
+                 s=s-1;
+        else
+            {
+                m=m-1;
+                s=59;
+            }
+        document.getElementById("time").innerHTML="Time left "+m+" : "+s;
+    }
+}
+
+function changeto(x,y)
+{
+    if(document.getElementById(y).innerHTML==document.getElementById(x).innerHTML)
+    {
+        document.getElementById(x).style.color="red";
+        document.getElementById(y).style.color="red";
+        score+=2;
+        nored+=2;
+    }
+    else
+    {
+        document.getElementById(x).style.color="transparent";
+        document.getElementById(y).style.color="transparent";
+    }
+}
+
+function changeit(x)
+{
+    if(document.getElementById(x).style.color=="red" || document.getElementById(x).style.color=="black")
+        return;
+        
+    move+=1;
+    var carr=["a","b","c","d","e","f","g","h","i","j","k","l","m","n","o","p"];
+    var v=-1;
+    var i;
+
+    for(i=0;i<16;i++)
+    { 
+        if(document.getElementById(carr[i]).style.color=="black")
+            {
+                v=i;
+                break;
+            } 
+    }
+    document.getElementById(x).style.color="black";
+    if(v!=-1)
+        window.setTimeout(changeto(x,carr[v]),3000);
+    
+    document.getElementById("scor").innerHTML=score;
+    document.getElementById("mov").innerHTML=move;
+    
+    if(nored==16)
+        {
+            clearit();
+            window.alert("Congrats !!! ");
+        }
+}
+</script>
+</head>
+
+<body>
+    <h1> Let's play Memory Game!! </h1>
+    <h2 style="padding-top:10px" id="time"> </h2> 
+    <input type="button" onclick="starttime()" value="Play"> </input>
+    <div class="container-fluid bg-1 text-center">
+        <div class="row">
+            <div class="container-fluid bg-2 text-center" id="a" onclick="changeit('a')"> </div>
+            <div class="container-fluid bg-2 text-center" id="b" onclick="changeit('b')"> </div>
+            <div class="container-fluid bg-2 text-center" id="c" onclick="changeit('c')"> </div>
+            <div class="container-fluid bg-2 text-center" id="d" onclick="changeit('d')"> </div>
+        </div>
+        <div class="row">
+            <div class="container-fluid bg-2 text-center" id="e" onclick="changeit('e')"> </div>
+            <div class="container-fluid bg-2 text-center" id="f" onclick="changeit('f')"> </div>
+            <div class="container-fluid bg-2 text-center" id="g" onclick="changeit('g')"> </div>
+            <div class="container-fluid bg-2 text-center" id="h" onclick="changeit('h')"> </div>
+        </div>
+        <div class="row">
+            <div class="container-fluid bg-2 text-center" id="i" onclick="changeit('i')"> </div>
+            <div class="container-fluid bg-2 text-center" id="j" onclick="changeit('j')"> </div>
+            <div class="container-fluid bg-2 text-center" id="k" onclick="changeit('k')"> </div>
+            <div class="container-fluid bg-2 text-center" id="l" onclick="changeit('l')"> </div>
+        </div>
+        <div class="row">
+            <div class="container-fluid bg-2 text-center" id="m" onclick="changeit('m')"> </div>
+            <div class="container-fluid bg-2 text-center" id="n" onclick="changeit('n')"> </div>
+            <div class="container-fluid bg-2 text-center" id="o" onclick="changeit('o')"> </div>
+            <div class="container-fluid bg-2 text-center" id="p" onclick="changeit('p')"> </div>
+        </div>
+    </div>
+    <h2> Score : <h2 id="scor">  </h2> </h2>
+    <h2> Moves : <h2 id="mov">  </h2>  </h2>
+    
+</body>
+</html>
+
